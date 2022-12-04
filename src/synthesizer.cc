@@ -1,6 +1,9 @@
+#define _USE_MATH_DEFINES
 #include <cmath>
+#include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -124,7 +127,7 @@ void generateSample(Synthesizer &synth, double *buffer) {
       }
 
       // Update the buffer with the sample value
-      cout << "Calculated sample value: " << value << endl;
+      // cout << "Calculated sample value: " << value << endl;
       buffer[0] += value * synth.notes[i].amplitude;
       buffer[1] += value * synth.notes[i].amplitude;
 
@@ -178,42 +181,51 @@ void playMusicFile(Synthesizer &synth, const char *filename) {
   // Parse the music file and generate samples for the synthesizer
   string line;
   while (getline(file, line)) {
+      std::istringstream ss(line.c_str());
     // Parse the line and extract the command and parameters
     string command;
-    double frequency, amplitude;
-    Instrument instrument;
-    if (sscanf(line.c_str(), "%s %lf", command.c_str(), &frequency) == 2) {
+    ss >> command;
+    double frequency = 0.0f, amplitude = 0.0f;
+    Instrument instrument = PIANO;
       // If the line has a command and a frequency, it is a NOTE ON or NOTE OFF
       // command
       if (command == "NOTE") {
+          ss >> command;
         // Parse the amplitude of the note
-        if (sscanf(line.c_str(), "%s %lf %lf", command.c_str(), &frequency,
-                   &amplitude) == 3) {
+        
           // If the line has a command, a frequency, and an amplitude, it is a
           // NOTE ON command
           if (command == "ON") {
+              ss >> frequency;
+              ss >> amplitude;
             playNote(synth, frequency, amplitude);
           }
           // If the line has a command, a frequency, and an amplitude, it is a
           // NOTE OFF command
           else if (command == "OFF") {
+              ss >> frequency;
             stopNote(synth, frequency);
           }
-        }
       }
       // If the line has a command and a frequency, it is an INSTRUMENT command
       else if (command == "INSTRUMENT") {
+          std::string instrument_name;
+          ss >> instrument_name;
         // Parse the instrument from the frequency
-        if (frequency == 0.0) {
+        if (instrument_name== "PIANO") {
           instrument = PIANO;
-        } else if (frequency == 1.0) {
+        } else if (instrument_name == "VIOLIN") {
           instrument = VIOLIN;
-        } else if (frequency == 2.0) {
+        } else if (instrument_name == "TRUMPET") {
           instrument = TRUMPET;
+        }
+        else
+        {
+            std::cerr << "unknown instrument: " << instrument_name << "\n";
         }
         setInstrument(synth, instrument);
       }
-    }
+    
 
     // Generate samples for the synthesizer and write them to the wav file
     double buffer[BUFFER_LENGTH * NUM_CHANNELS];
@@ -293,10 +305,10 @@ bool runTests() {
 
 int main(int argc, char **argv) {
   // Run the tests
-  if (!runTests()) {
+  /*if (!runTests()) {
     return 1;
   }
-
+  */
   // Play the specified music file on the synthesizer
   if (argc < 2) {
     cout << "Usage: synthesizer <music_file>" << endl;
