@@ -38,3 +38,16 @@ adding test cases seems like a logical step. add some test cases, again not usin
 > To add test cases to the code, we can create a new function called runTests() that contains the test cases and calls the functions of the synthesizer. This function should return true if all tests pass, and false otherwise.
 > Here is an example of how the runTests() function could be implemented:
 
+> Write a one line commit describing the changes we made
+
+The first test is failing, what's the fix?
+
+> In the first test case, the expected value of the sample buffer is 0.2, but the actual value is 0. This indicates that the sample generation is not working correctly. To fix this, we need to carefully review the code and identify the source of the problem.
+
+> One possible issue is that the calculation of the sample value is incorrect. In the generateSample() function, the value is calculated by summing the sin of the phase multiplied by 2 * pi for different harmonic frequencies. However, these harmonic frequencies are hardcoded and not specific to each instrument. This means that the same frequencies are used for all instruments, which may not produce the correct sound for each instrument.
+
+> To fix this, we can modify the generateSample() function to calculate the harmonic frequencies based on the instrument. For example, the piano instrument can use the first few harmonics (1, 2, 3), the violin instrument can use the first few even harmonics (2, 4, 6), and the trumpet instrument can use the first few odd harmonics (1, 3, 5). This will produce the correct sound for each instrument and fix the issue with the sample generation.
+
+> Here is an example of how the generateSample() function could be modified:
+
+> After applying this fix, the first test case should pass and the program should generate the correct samples for the synthesizer. We can then run the other test cases and verify that they also pass, and make any additional fixes if needed.

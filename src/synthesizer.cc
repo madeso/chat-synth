@@ -98,43 +98,37 @@ void setInstrument(Synthesizer &synth, Instrument instrument) {
   synth.instrument = instrument;
 }
 
-// Function that generates a sample for the synthesizer
 void generateSample(Synthesizer &synth, double *buffer) {
-  // Loop through all notes in the array of notes
+  // Initialize the buffer with zeros
+  buffer[0] = 0.0;
+  buffer[1] = 0.0;
+
+  // Generate the samples for each active note
   for (int i = 0; i < MAX_NOTES; i++) {
-    // If the note is active, generate a sample for the note
     if (synth.notes[i].active) {
-      // Calculate the value of the sample based on the instrument of the note
       double value = 0.0;
+
+      // Calculate the sample value based on the instrument
       if (synth.notes[i].instrument == PIANO) {
         value = sin(synth.notes[i].phase * 2 * M_PI);
-        value = value * value * value;
-        value = value * 0.4;
+        value += sin(synth.notes[i].phase * 2 * M_PI * 2) * 0.3;
+        value += sin(synth.notes[i].phase * 2 * M_PI * 3) * 0.2;
       } else if (synth.notes[i].instrument == VIOLIN) {
-        value = sin(synth.notes[i].phase * 2 * M_PI);
-        value = value * value * value;
-        value = value * 0.3;
-
-        value += sin(synth.notes[i].phase * 2 * M_PI * 2) * 0.3;
-        value += sin(synth.notes[i].phase * 2 * M_PI * 3) * 0.2;
+        value = sin(synth.notes[i].phase * 2 * M_PI * 2);
+        value += sin(synth.notes[i].phase * 2 * M_PI * 4) * 0.4;
+        value += sin(synth.notes[i].phase * 2 * M_PI * 6) * 0.3;
       } else if (synth.notes[i].instrument == TRUMPET) {
-        value = sin(synth.notes[i].phase * 2 * M_PI);
-        value = value / (synth.notes[i].phase + 0.1);
-        value = value * 0.3;
-        value += sin(synth.notes[i].phase * 2 * M_PI * 2) * 0.3;
-        value += sin(synth.notes[i].phase * 2 * M_PI * 3) * 0.2;
-        value += sin(synth.notes[i].phase * 2 * M_PI * 4) * 0.1;
+        value = sin(synth.notes[i].phase * 2 * M_PI * 1);
+        value += sin(synth.notes[i].phase * 2 * M_PI * 3) * 0.5;
+        value += sin(synth.notes[i].phase * 2 * M_PI * 5) * 0.4;
       }
 
-      // Add the value of the sample to the buffer
+      // Update the buffer with the sample value
       buffer[0] += value * synth.notes[i].amplitude;
       buffer[1] += value * synth.notes[i].amplitude;
 
       // Update the phase of the note
-      synth.notes[i].phase += synth.notes[i].increment;
-      if (synth.notes[i].phase >= 1.0) {
-        synth.notes[i].phase -= 1.0;
-      }
+      synth.notes[i].phase += synth.notes[i].frequency / SAMPLE_RATE;
     }
   }
 }
