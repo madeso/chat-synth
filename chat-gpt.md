@@ -26,3 +26,15 @@ The synth from earlier isn't calling generateSample. I think it would be better 
 > Here is a modified version of the C++ code for the polyphonic software synthesizer that generates the samples and writes them to a wav file:
 
 > git commit in one line describing what we have done
+
+the program generated song.wav but it's silent, why?
+
+> The program is generating samples for the synthesizer and writing them to the wav file, but the samples are not being generated correctly. This could be due to several reasons, such as incorrect parsing of the music file, incorrect calculation of the sample values, or incorrect writing of the wav file.
+
+> To fix this issue, we need to carefully review the code and identify the source of the problem. We can also add more debug output to the code to help us understand what is happening at each step. For example, we can print the values of the variables used in the sample generation and the wav file writing, and compare them with the expected values. We can also add more test cases to the code and verify that the generated samples and wav files are correct for those cases. Once we find the source of the problem, we can fix it and try again until the program generates a correct and audible wav file.
+
+adding test cases seems like a logical step. add some test cases, again not using any external dependencies 
+
+> To add test cases to the code, we can create a new function called runTests() that contains the test cases and calls the functions of the synthesizer. This function should return true if all tests pass, and false otherwise.
+> Here is an example of how the runTests() function could be implemented:
+

@@ -245,17 +245,67 @@ void playMusicFile(Synthesizer &synth, const char *filename) {
   wav.close();
 }
 
-int main(int argc, char **argv) {
-  if (argc < 2) {
-    cout << "Usage: synthesizer <music_file>" << endl;
-    return 1;
-  }
-
+bool runTests() {
   // Initialize the synthesizer
   Synthesizer synth;
   initSynthesizer(synth);
 
+  // Test case 1: Play a piano note and generate a sample
+  playNote(synth, 440.0, 0.5);
+  double buffer[NUM_CHANNELS];
+  generateSample(synth, buffer);
+  if (buffer[0] != 0.2 || buffer[1] != 0.2) {
+    cout << "Error: Test case 1 failed" << endl;
+    return false;
+  }
+
+  // Test case 2: Play a violin note and generate a sample
+  setInstrument(synth, VIOLIN);
+  playNote(synth, 440.0, 0.5);
+  generateSample(synth, buffer);
+  if (buffer[0] != 0.15 || buffer[1] != 0.15) {
+    cout << "Error: Test case 2 failed" << endl;
+    return false;
+  }
+
+  // Test case 3: Play a trumpet note and generate a sample
+  setInstrument(synth, TRUMPET);
+  playNote(synth, 440.0, 0.5);
+  generateSample(synth, buffer);
+  if (buffer[0] != 0.075 || buffer[1] != 0.075) {
+    cout << "Error: Test case 3 failed" << endl;
+    return false;
+  }
+
+  // Test case 4: Play a music file and generate samples
+  /*
+  playMusicFile(synth, "test.txt");
+  ifstream wav("song.wav", ios::binary);
+  if (!wav.is_open()) {
+    cout << "Error: Test case 4 failed" << endl;
+    return false;
+  }
+  wav.close();
+  */
+
+  // All tests pass
+  cout << "All tests pass" << endl;
+  return true;
+}
+
+int main(int argc, char **argv) {
+  // Run the tests
+  if (!runTests()) {
+    return 1;
+  }
+
   // Play the specified music file on the synthesizer
+  if (argc < 2) {
+    cout << "Usage: synthesizer <music_file>" << endl;
+    return 1;
+  }
+  Synthesizer synth;
+  initSynthesizer(synth);
   playMusicFile(synth, argv[1]);
 
   return 0;
