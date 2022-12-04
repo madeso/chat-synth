@@ -19,3 +19,10 @@ write a readme.md file for this project
 
 git commit message in one sentance describing the changes we just made
 
+The synth from earlier isn't calling generateSample. I think it would be better instead of playing the song we should synth the song to wav file
+
+> Yes, you are correct. In the original code, the function generateSample() is not being called. It would be better to modify the code to generate the samples for the synthesizer and write them to a wav file, instead of playing the song directly.
+
+> Here is a modified version of the C++ code for the polyphonic software synthesizer that generates the samples and writes them to a wav file:
+
+> git commit in one line describing what we have done
