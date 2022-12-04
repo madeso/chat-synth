@@ -124,6 +124,7 @@ void generateSample(Synthesizer &synth, double *buffer) {
       }
 
       // Update the buffer with the sample value
+      cout << "Calculated sample value: " << value << endl;
       buffer[0] += value * synth.notes[i].amplitude;
       buffer[1] += value * synth.notes[i].amplitude;
 
@@ -245,9 +246,12 @@ bool runTests() {
   initSynthesizer(synth);
 
   // Test case 1: Play a piano note and generate a sample
+  cout << "Test case 1: Play a piano note and generate a sample" << endl;
   playNote(synth, 440.0, 0.5);
+  cout << "Played note: 440.0 Hz, 0.5 amplitude" << endl;
   double buffer[NUM_CHANNELS];
   generateSample(synth, buffer);
+  cout << "Generated sample: " << buffer[0] << ", " << buffer[1] << endl;
   if (buffer[0] != 0.2 || buffer[1] != 0.2) {
     cout << "Error: Test case 1 failed" << endl;
     return false;
