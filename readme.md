@@ -1,3 +1,5 @@
+# Chat-synth
+
 This project was generated using chat gpt. Apart from running clang-format I have done nothing.
 
 
